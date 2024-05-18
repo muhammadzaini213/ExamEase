@@ -9,5 +9,5 @@
     <path android:fillColor="@android:color/white" android:fillType="evenOdd" android:pathData="M5,11h5v2h-5z"/>
       
     <path android:fillColor="@android:color/white" android:fillType="evenOdd" android:pathData="M5,15h5v2h-5z"/>
-    
+
 </vector>

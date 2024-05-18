@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/button_exit"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/button_exit"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Exam Ease"
             android:textColor="@color/white"
-            android:textSize="40dp"
+            android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,9 +100,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border_exam_question_answer"
             android:maxHeight="360dp"
+            android:minHeight="40dp"
             android:padding="15dp"
             android:text="What is the capital city of Indonesia?"
-            android:minHeight="40dp"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,11 +110,11 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/border_exam_question_answer"
             android:maxHeight="250dp"
             android:minHeight="40dp"
             android:padding="15dp"
             android:text="A. Indonesia \nB. Bandung\nC.Jakarta\nD.Surabaya\nE.Jambi "
-            android:background="@drawable/border_exam_question_answer"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Exam Ease"
             android:textColor="@color/white"
-            android:textSize="40dp"
+            android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
                 android:id="@+id/main_title_info_identity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="UID: 1234XXXXXXXXXXXXXXX\nName: Student Name\nNSN: 1234XXXXXXXXXXXXXX\nGrade: X"
+                android:text="School ID: 1234XXXXXXXXXXXXXXX\nName: SCHOOL NAME\nNSN: None\nGrade: Admin"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="15dp" />
@@ -119,13 +119,13 @@
                     android:id="@+id/main_menu_exam_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_exam" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="EXAM"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -145,13 +145,13 @@
                     android:id="@+id/main_menu_web_exam_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_web_exam" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="WEB EXAM"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -167,7 +167,7 @@
             android:weightSum="2">
 
             <LinearLayout
-                android:id="@+id/main_menu_exam_announcement"
+                android:id="@+id/main_menu_announcement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -178,16 +178,16 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/main_menu_exam_announcement_button"
+                    android:id="@+id/main_menu_announcement_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_announcement" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="ANNOUNCEMENT"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -207,13 +207,13 @@
                     android:id="@+id/main_menu_attendance_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_attendance" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="ATTENDANCE"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -243,13 +243,13 @@
                     android:id="@+id/main_menu_settings_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_settings" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="SETTINGS"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -269,13 +269,13 @@
                     android:id="@+id/main_menu_policy_button"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/border_main_buttons"
+                    android:background="@drawable/ripple_main_menu_button"
                     android:src="@drawable/menu_policy" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:paddingTop="0dp"
                     android:text="POLICY"
                     android:textStyle="bold" />
             </LinearLayout>

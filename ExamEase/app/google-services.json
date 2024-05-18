@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335358816549",
+    "project_id": "examease-4e93f",
+    "storage_bucket": "examease-4e93f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335358816549:android:6f5d671080c2504eb56acc",
+        "android_client_info": {
+          "package_name": "com.mzopensource.examease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXqRjSAWrIMMfD18pRe8Kh3baqebcJjt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
