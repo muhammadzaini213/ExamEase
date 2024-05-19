@@ -1,10 +1,10 @@
 package com.mzopensource.examease.main;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,6 +43,7 @@ public class MainTitle {
         }
         return sb.toString();
     }
+
     private void inputSchoolNameDialog(DocumentReference docRef) {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_enter_school_name);
@@ -58,12 +57,13 @@ public class MainTitle {
         Button okButton = dialog.findViewById(R.id.enter_button);
         okButton.setOnClickListener(v -> {
             String email = user.getEmail();
-            Toast.makeText(context, user.getEmail(), Toast.LENGTH_SHORT).show();
+            String school_id = generateRandomNumericString();
             String inputText = input.getText().toString();
             Map<String, Object> userData = new HashMap<>();
             userData.put("Email", email); //generate email
             userData.put("School Name", inputText); // generate school name
-            userData.put("School ID", generateRandomNumericString()); // generate random digit for school ID
+            userData.put("Name", "Admin"); // generate name for admin
+            userData.put("School ID", school_id); // generate random digit for school ID
 
             // if exists add user data to database
             docRef.set(userData)
@@ -71,16 +71,29 @@ public class MainTitle {
                     .addOnFailureListener(e -> {
                     });
 
+            setSchoolData(school_id);
             dialog.dismiss();
         });
         dialog.show();
     }
 
-    public void init(ConstraintLayout main_title, Context context) {
+    private void setSchoolData(String school_id){
+        //create database for school ID
+        DocumentReference schoolDocRef = FirebaseFirestore.getInstance().collection("school_id").document(school_id);
+        Map<String, Object> schoolData = new HashMap<>();
+        schoolData.put("Hello World", "Why are you here? Get out please, or i call the police"); // generate website url
+        // if exists add user data to database
+        schoolDocRef.set(schoolData)
+                .addOnSuccessListener(aVoid -> readUserData())
+                .addOnFailureListener(e -> {
+                });
+    }
+
+    public void init(ConstraintLayout main_title, Context context, Activity activity) {
         this.context = context;
-        ImageView main_title_exit = main_title.findViewById(R.id.main_title_exit);
         TextView main_title_titletext = main_title.findViewById(R.id.main_title_titletext);
         ImageView main_title_profile = main_title.findViewById(R.id.main_title_profile);
+
 
         LinearLayout main_title_info = main_title.findViewById(R.id.main_title_info);
         main_title_info_school = main_title_info.findViewById(R.id.main_title_info_school);
@@ -92,12 +105,11 @@ public class MainTitle {
         user = UserData.getUserData();
         String uid = user.getUid();
 
-
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        DocumentReference docRef = db.collection("users").document(uid);
-        docRef.get().addOnCompleteListener(task -> {
+        DocumentReference usersDocRef = db.collection("users").document(uid);
+        usersDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -105,7 +117,7 @@ public class MainTitle {
                     readUserData();
                 } else {
                     // Document does not exist, create a new one
-                    inputSchoolNameDialog(docRef);
+                    inputSchoolNameDialog(usersDocRef);
                 }
             } else {
                 Toast.makeText(context, "Please verify your email to access this feature.", Toast.LENGTH_SHORT).show();
@@ -114,24 +126,26 @@ public class MainTitle {
         });
 
         //handle profile button
-        main_title_profile.setOnClickListener(view -> context.startActivity(new Intent(context, ProfileActivity.class)));
+        main_title_profile.setOnClickListener(view -> {
+            context.startActivity(new Intent(context, ProfileActivityAdmin.class));
+            activity.finish();
+        });
     }
 
     private void readUserData() {
         String uid = user.getUid();
 
         // Reference to the user's document
-        DocumentReference docRef = db.collection("users").document(uid);
-        docRef.get().addOnCompleteListener(task -> {
+        DocumentReference userdDocRef = db.collection("users").document(uid);
+        userdDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     // Document exists, handle the retrieved data
-//                        Log.d(TAG, "Document data: " + document.getData());
-                    // You can extract data from the document as needed
                     String schoolId = document.getString("School ID");
                     String schoolName = document.getString("School Name");
 
+                    // set the title info
                     main_title_info_school.setText(schoolName);
                     main_title_info_identity.setText("School ID: " + schoolId);
                     main_title_info_identity.append("\n");
@@ -141,13 +155,10 @@ public class MainTitle {
                     main_title_info_identity.append("\n");
                     main_title_info_identity.append("Account: " + "Premium");
 
-                    // Update UI or perform other actions with the retrieved data
-//                        Log.d(TAG, "Name: " + name + ", Email: " + email);
                 } else {
                     Toast.makeText(context, "No user data found.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
                 Toast.makeText(context, "Failed to retrieve data.", Toast.LENGTH_SHORT).show();
             }
         });

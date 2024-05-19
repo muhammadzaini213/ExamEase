@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mzopensource.examease"
-        minSdk = 26
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -41,4 +41,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("org.apache.poi:poi:4.0.1")
+    implementation("org.apache.poi:poi-ooxml:4.0.1")
 }

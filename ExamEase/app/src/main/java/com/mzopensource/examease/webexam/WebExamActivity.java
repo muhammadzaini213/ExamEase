@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
@@ -14,33 +13,118 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.HalfFloat;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mzopensource.examease.R;
+import com.mzopensource.examease.userdata.UserData;
 
 public class WebExamActivity extends AppCompatActivity {
+    private FirebaseFirestore db;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+    boolean detect;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_exam);
 
-        showUrlDialog();
+        // Initialize Firebase instances
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        user = UserData.getUserData();
+
+        if (user != null) {
+            // Set the content view for logged-in users
+            setContentView(R.layout.activity_web_exam_admin);
+            ConstraintLayout container = findViewById(R.id.container);
+
+            // Initialize input fields
+            EditText test_name_input = container.findViewById(R.id.test_name_input);
+            EditText website_input = container.findViewById(R.id.website_input);
+
+            //input fields for date and time picker
+            LinearLayout date_and_time = container.findViewById(R.id.date_and_time);
+            TextView date_input = date_and_time.findViewById(R.id.date_input);
+            TextView time_input = date_and_time.findViewById(R.id.time_input);
+            new WebExamDatePicker(date_and_time, this);
 
 
-        ImageView btn_exit = findViewById(R.id.constraintLayout)
-                .findViewById(R.id.button_exit);
-        btn_exit.setOnClickListener(view -> {
-            finish();
-        });
+            new WebExamUpload(container, this);
 
-        new Handler().postDelayed(() -> detect = true, 1000);
+            // Initialize buttons
+            Button advanced_options = container.findViewById(R.id.advanced_options);
+            Button save = container.findViewById(R.id.save_btn);
+            Button save_and_publish = findViewById(R.id.save_and_publish);
+
+            String uid = user.getUid();
+            DocumentReference usersDocRef = db.collection("users").document(uid);
+
+            usersDocRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Document exists, read the data
+                        // readUserData(); // Uncomment and implement this method
+                    } else {
+                        // Document does not exist, create a new one
+                        // inputSchoolNameDialog(usersDocRef); // Uncomment and implement this method
+                    }
+                } else {
+                    Toast.makeText(this, "Please verify your email to access this feature.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Set the content view for users who are not logged in
+            setContentView(R.layout.activity_web_exam);
+            ImageView btn_exit = findViewById(R.id.constraintLayout).findViewById(R.id.button_exit);
+            btn_exit.setOnClickListener(view -> finish());
+            // Show URL dialog
+            showUrlDialog(); // Ensure this method is implemented
+        }
+
+
+        ImageView btn_exit = findViewById(R.id.button_exit);
+        btn_exit.setOnClickListener(view -> finish());
+
+
+        // Use a handler to set detect to true after a delay
+        new Handler().postDelayed(() -> detect = true, 1000); // Ensure detect is declared and used properly
     }
+
+
+    private void readUserData() {
+        String uid = user.getUid();
+        // Reference to the user's document
+        DocumentReference userDocRef = db.collection("users").document(uid);
+        userDocRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Document exists, handle the retrieved data
+                    String schoolId = document.getString("School ID");
+
+
+                } else {
+                    Toast.makeText(this, "No user data found.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Failed to retrieve data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void showUrlDialog() {
         final Dialog dialog = new Dialog(this);
@@ -90,11 +174,9 @@ public class WebExamActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    boolean detect;
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        if (detect) {
+        if (detect && user == null) {
             if (!hasFocus) {
                 detect = false;
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WebExamActivity.this);
@@ -108,6 +190,7 @@ public class WebExamActivity extends AppCompatActivity {
                             detect = true;
                         });
                 AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.setCancelable(false);
                 alertDialog.show();
                 new CountDownTimer(5000, 1000) {
                     @Override
@@ -129,7 +212,6 @@ public class WebExamActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-
         super.onPause();
     }
 

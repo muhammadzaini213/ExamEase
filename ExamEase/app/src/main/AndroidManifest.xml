@@ -28,7 +28,7 @@
         <activity android:name=".login.ForgotPasswordActivity"/>
         <activity android:name=".login.CreateAccountActivity"/>
         <activity android:name=".main.MainActivity"/>
-        <activity android:name=".main.ProfileActivity"/>
+        <activity android:name=".main.ProfileActivityAdmin"/>
 
         <activity android:name=".ExamActivity"/>
         <activity android:name=".webexam.WebExamActivity"/>
